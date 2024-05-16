@@ -1,0 +1,23 @@
+<div
+  class="fixed left-0 top-0 z-50 flex h-screen w-screen flex-col items-center justify-center bg-gray-50/95 text-gray-700 backdrop-blur-sm sm:hidden"
+>
+  <ul class="flex w-full flex-col items-center gap-6 text-2xl font-semibold">
+    @for (link of links; track $index) {
+      <li>
+        <a
+          routerLink="{{ link.url }}"
+          (click)="mobileService.closeMobileNav()"
+          routerLinkActive="underline text-orange-600"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >{{ link.title }}</a
+        >
+      </li>
+    }
+  </ul>
+  <button
+    class="absolute right-5 top-5"
+    (click)="mobileService.closeMobileNav()"
+  >
+    <fa-icon [icon]="faCircleXmark" class="text-3xl text-gray-700"></fa-icon>
+  </button>
+</div>

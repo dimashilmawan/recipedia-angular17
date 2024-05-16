@@ -1,0 +1,39 @@
+<header class="w-full text-gray-700">
+  <app-container>
+    <nav class="flex h-16 items-center justify-between">
+      <div>
+        <a routerLink="/"> Recipedia </a>
+      </div>
+      <ul class="hidden items-center gap-6 sm:flex">
+        @for (link of links; track $index) {
+          <li>
+            <a
+              routerLink="{{ link.url }}"
+              routerLinkActive="text-orange-600 font-semibold"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="transition-all hover:text-orange-500 hover:underline"
+              >{{ link.title }}</a
+            >
+          </li>
+        }
+      </ul>
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-3 text-3xl sm:text-2xl">
+          <button (click)="modalService.openModal()">
+            <fa-icon [icon]="faInfoCircle"></fa-icon>
+          </button>
+          @if (isRecipeDetail) {
+            <button>
+              <fa-icon [icon]="faBookmarkOutline"></fa-icon>
+            </button>
+          }
+        </div>
+        <button (click)="mobileService.openMobileNav()" class="sm:hidden">
+          <fa-icon [icon]="faBars" class="text-3xl"></fa-icon>
+        </button>
+      </div>
+    </nav>
+  </app-container>
+</header>
+
+<!-- class="lg:max-w-[72rem] lg:px-[2.25rem] max-w-xs md:max-w-[56rem] md:px-[1.75rem] mx-auto px-[1rem] sm:max-w-[44rem] sm:px-[1.25rem] w-full xl:max-w-[88rem] xl:px-[2.75rem]" -->

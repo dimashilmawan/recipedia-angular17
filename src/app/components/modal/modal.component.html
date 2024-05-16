@@ -1,0 +1,43 @@
+<div
+  class="fixed inset-0 z-40 bg-black/85 backdrop-blur-[4px]"
+  (click)="modalService.closeModal()"
+></div>
+<app-container
+  customClass="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 !max-w-2xl z-50"
+  ><div class="relative rounded-lg bg-gray-100 p-4 pt-10 sm:p-8 sm:pt-12">
+    <button class="absolute right-3 top-3" (click)="modalService.closeModal()">
+      <fa-icon [icon]="faXmarkCircle" class="text-2xl"></fa-icon>
+    </button>
+    <div class="text-base">
+      <h1 class="font-semibold text-gray-800">About:</h1>
+      <p class="mt-1">
+        The Recipedia App allows you to Search for Recipes and Save the Recipes
+      </p>
+
+      <h2 class="mt-4 font-semibold text-gray-800">How it works:</h2>
+      <ol class="mt-1 list-inside list-decimal space-y-1">
+        <li>
+          Search for your recipes by entering the name into the search bar.
+        </li>
+        <li>
+          Select a recipe within the results, this will take you to the recipe
+          page for your selection.
+        </li>
+        <li>
+          Save the recipe by clicking on the
+          <fa-icon [icon]="faBookmarkOutline" class="text-lg"></fa-icon>
+          icon in the top Navbar. This will save the recipe to My-Recipe Page.
+        </li>
+      </ol>
+
+      <h2 class="mt-4 font-semibold text-gray-800">Removing a Recipe</h2>
+      <p class="mt-1">
+        If you no longer need to save the recipe, simply select recipe within My
+        recipe page. At the navbar, click the
+
+        <fa-icon [icon]="faBookmarkSolid" class="text-lg"></fa-icon>
+        icon in the top Navbar
+      </p>
+    </div>
+  </div></app-container
+>
