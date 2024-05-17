@@ -61,7 +61,11 @@ export class HomeComponent {
 
   onSubmit(event: SubmitEvent, query: string) {
     event.preventDefault();
+
+    if (!query) return;
+
     this.loading = true;
+    this.error = null;
     this.recipeResults = null;
 
     this.recipeService.searchRecipes(query).subscribe({

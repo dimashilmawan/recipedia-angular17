@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { CategoryComponent } from './pages/category/category.component';
-import { MyRecipeComponent } from './pages/my-recipe/my-recipe.component';
+import { AllCategoriesComponent } from './pages/all-categories/all-categories.component';
+import { MyRecipesComponent } from './pages/my-recipes/my-recipes.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
@@ -12,30 +12,39 @@ export const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'category',
-    // loadComponent: () =>
-    //   import('./pages/category/category.component').then(
-    //     (m) => m.CategoryComponent,
-    //   ),
+    path: 'categories',
+    loadComponent: () =>
+      import('./pages/all-categories/all-categories.component').then(
+        (m) => m.AllCategoriesComponent,
+      ),
 
-    component: CategoryComponent,
+    // component: CategoriesComponent,
   },
   {
-    path: 'my-recipe',
-    // loadComponent: () =>
-    //   import('./pages/my-recipe/my-recipe.component').then(
-    //     (m) => m.MyRecipeComponent,
-    //   ),
+    path: 'categories/:name',
+    loadComponent: () =>
+      import('./pages/recipes-by-category/recipes-by-category.component').then(
+        (m) => m.RecipesByCategoryComponent,
+      ),
 
-    component: MyRecipeComponent,
+    // component: CategoriesComponent,
+  },
+  {
+    path: 'my-recipes',
+    loadComponent: () =>
+      import('./pages/my-recipes/my-recipes.component').then(
+        (m) => m.MyRecipesComponent,
+      ),
+
+    // component: MyRecipesComponent,
   },
   {
     path: '**',
-    // loadComponent: () =>
-    //   import('./pages/not-found/not-found.component').then(
-    //     (m) => m.NotFoundComponent,
-    //   ),
+    loadComponent: () =>
+      import('./pages/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent,
+      ),
 
-    component: NotFoundComponent,
+    // component: NotFoundComponent,
   },
 ];

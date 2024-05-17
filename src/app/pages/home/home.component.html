@@ -2,7 +2,7 @@
 <section class="relative bg-gray-100 py-28 md:py-32">
   <app-container customClass="!max-w-2xl">
     <ul
-      class="absolute -top-0 left-1/2 flex w-full -translate-x-1/2 -translate-y-1/2 flex-wrap justify-center gap-3 sm:gap-6"
+      class="absolute -top-0 left-1/2 grid w-full max-w-[15rem] -translate-x-1/2 -translate-y-1/2 grid-cols-2 gap-3 sm:max-w-[16rem] md:max-w-xl md:grid-cols-4 md:gap-6 lg:max-w-2xl"
     >
       @for (cat of categoriesOverview; track cat.id) {
         <app-category-card [cat]="cat"></app-category-card>
@@ -30,7 +30,9 @@
     </form>
   </app-container>
   <app-container customClass="mt-6 md:mt-10">
-    <ul class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
+    <ul
+      class="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4 lg:gap-7 xl:grid-cols-5"
+    >
       @for (recipe of recipeResults; track +recipe.id) {
         <app-recipe-card [recipe]="recipe"></app-recipe-card>
       }

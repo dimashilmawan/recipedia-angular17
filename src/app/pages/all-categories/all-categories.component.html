@@ -1,0 +1,17 @@
+<section class="py-4 md:py-6 lg:py-10">
+  <app-container>
+    <h1 class="text-xl font-semibold md:text-3xl lg:text-4xl">
+      All Recipe Categories
+    </h1>
+    <ul
+      class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:mt-6 md:grid-cols-4 md:gap-5 lg:mt-8"
+    >
+      @for (cat of categories; track cat.id) {
+        <app-category-card
+          [cat]="cat"
+          [isCategoriesPage]="true"
+        ></app-category-card>
+      }
+    </ul>
+  </app-container>
+</section>

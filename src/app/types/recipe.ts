@@ -9,3 +9,10 @@ export type Recipe = {
   ingredients: string[];
   measures: string[];
 };
+
+export type RecipeOverview = {
+  id: string;
+  name: string;
+  category: string;
+  thumbnail: string;
+};

@@ -4,6 +4,7 @@ import {
   Router,
   RouterLink,
   RouterLinkActive,
+  RouterState,
 } from '@angular/router';
 import { filter } from 'rxjs';
 import { ContainerComponent } from '../container/container.component';
@@ -45,8 +46,8 @@ export class NavComponent {
 
   links = [
     { title: 'Home', url: '/' },
-    { title: 'Category', url: '/category' },
-    { title: 'My Recipe', url: '/my-recipe' },
+    { title: 'Categories', url: '/categories' },
+    { title: 'My Recipes', url: '/my-recipes' },
   ];
 
   isRecipeDetail!: boolean;
