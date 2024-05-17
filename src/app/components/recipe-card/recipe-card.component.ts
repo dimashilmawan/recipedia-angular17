@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Recipe } from '../../types/recipe';
+import { RecipeOverview } from '../../types/recipe';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -10,5 +10,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './recipe-card.component.css',
 })
 export class RecipeCardComponent {
-  @Input() recipe!: Recipe;
+  @Input() recipe!: RecipeOverview;
 }

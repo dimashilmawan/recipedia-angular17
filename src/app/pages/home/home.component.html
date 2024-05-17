@@ -8,30 +8,30 @@
         <app-category-card [cat]="cat"></app-category-card>
       }
     </ul>
-    <form
-      class="flex gap-3"
-      id="search"
-      (submit)="onSubmit($event, input.value)"
-    >
-      <input
-        placeholder="Enter your recipe"
-        class="w-full rounded-md bg-white px-4 py-2 outline-none ring-1 ring-gray-950/10 focus-visible:ring-2 focus-visible:ring-orange-500"
-        #input
-      />
-      <button
-        type="submit"
-        class="h-10 w-10 rounded-md bg-white outline-none ring-1 ring-gray-950/10 focus-visible:ring-orange-500"
+    <form id="search">
+      <label
+        class="flex items-center gap-3 rounded-md bg-white px-4 py-2 pr-2 [&:has(.input:focus-visible)]:ring-2 [&:has(.input:focus-visible)]:ring-orange-600"
+        for="input"
       >
-        <fa-icon
-          [icon]="faMagnifyingGlass"
-          class="text-lg md:text-xl"
-        ></fa-icon>
-      </button>
+        <input
+          id="input"
+          placeholder="Enter your recipe"
+          class="input w-full outline-none"
+          #input
+        />
+        <button
+          type="button"
+          (click)="input.value = ''; recipeResults = null"
+          class="button flex h-6 w-6 items-center justify-center rounded-full bg-white outline-none ring-[1.5px] ring-gray-950/10 focus-visible:ring-red-500 focus-visible:ring-offset-1"
+        >
+          <fa-icon [icon]="faXmark" class="text-xs font-semibold"></fa-icon>
+        </button>
+      </label>
     </form>
   </app-container>
   <app-container customClass="mt-6 md:mt-10">
     <ul
-      class="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4 lg:gap-7 xl:grid-cols-5"
+      class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-7 xl:grid-cols-5"
     >
       @for (recipe of recipeResults; track +recipe.id) {
         <app-recipe-card [recipe]="recipe"></app-recipe-card>
@@ -50,5 +50,7 @@
         Sorry, we couldn't find any recipes matching your search criteria.
       </p>
     }
+    <!-- <h1>{{ testService.firstName }}</h1>
+    <button (click)="testService.changeName()">change</button> -->
   </app-container>
 </section>

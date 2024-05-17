@@ -1,1 +1,42 @@
-<p>category-detail works!</p>
+<section class="py-4 md:py-6 lg:py-32">
+  <app-container customClass="mt-6 md:mt-10">
+    <ul
+      class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-7 xl:grid-cols-5"
+    >
+      @for (recipe of paginatedData; track +recipe.id) {
+        <app-recipe-card [recipe]="recipe"></app-recipe-card>
+      }
+    </ul>
+
+    @if (loading) {
+      <app-loading-spinner></app-loading-spinner>
+    }
+    @if (error) {
+      <p class="text-center text-sm text-red-700 md:text-xl">
+        {{ error | json }}
+      </p>
+    }
+    @if (recipesByCategoryResults?.length === 0) {
+      <p class="text-center text-sm font-semibold md:text-xl">
+        Sorry, we couldn't find any recipes matching your Category.
+      </p>
+    }
+
+    @if (recipesByCategoryResults) {
+      <div class="mx-auto mt-10 flex items-center justify-center gap-8">
+        <!-- <button (click)="previousPage()" [disabled]="!(currentPage > 1)">
+          Prev
+        </button>
+        <button (click)="nextPage()" [disabled]="!(currentPage < totalPages)">
+          Next
+        </button> -->
+        @if (currentPage > 1) {
+          <button (click)="previousPage()">Prev</button>
+        }
+        @if (currentPage < totalPages) {
+          <button (click)="nextPage()">Next</button>
+        }
+      </div>
+    }
+  </app-container>
+</section>
