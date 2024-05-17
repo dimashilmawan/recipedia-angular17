@@ -1,32 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ContainerComponent } from '../../components/container/container.component';
-import { CATEGORIES, CATEGORIES_TYPE } from '../../constants/categories';
+import { CATEGORIES_OVERVIEW } from '../../constants/categories';
 import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faEllipsisH,
   faMagnifyingGlass,
   faCircleChevronDown,
   faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import { RecipeService } from '../../services/recipe.service';
 import { HeroComponent } from '../../components/hero/hero.component';
-import { Meal } from '../../types/meal';
+import { Recipe } from '../../types/recipe';
+import { RecipeCardComponent } from '../../components/recipe-card/recipe-card.component';
+import { CategoryCardComponent } from '../../components/category-card/category-card.component';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ContainerComponent, RouterLink, FontAwesomeModule, HeroComponent],
+  imports: [
+    ContainerComponent,
+    RouterLink,
+    FontAwesomeModule,
+    HeroComponent,
+    RecipeCardComponent,
+    CategoryCardComponent,
+    LoadingSpinnerComponent,
+    CommonModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  faEllipsisH = faEllipsisH;
   faMagnifyingGlass = faMagnifyingGlass;
   faCircleChevronDown = faCircleChevronDown;
   faSpinner = faSpinner;
 
-  recipeResults: Meal[] | null = null;
-  // recipeResults: Meal[] | null = [
+  recipeResults: Recipe[] | null = null;
+  // recipeResults: Recipe[] | null = [
   //   {
   //     id: '12',
   //     category: 'wd',
@@ -41,14 +53,11 @@ export class HomeComponent {
   // ];
 
   loading = false;
+  error: any = null;
 
-  categories!: CATEGORIES_TYPE;
+  categoriesOverview = CATEGORIES_OVERVIEW;
 
-  constructor(private recipeService: RecipeService) {
-    this.categories = CATEGORIES.filter((cat) =>
-      ['Chicken', 'Beef', 'Seafood'].includes(cat.name),
-    );
-  }
+  private recipeService = inject(RecipeService);
 
   onSubmit(event: SubmitEvent, query: string) {
     event.preventDefault();
@@ -59,7 +68,9 @@ export class HomeComponent {
       next: (value) => {
         this.recipeResults = value;
       },
-      error: (err) => {},
+      error: (err) => {
+        this.error = err;
+      },
       complete: () => {
         this.loading = false;
       },

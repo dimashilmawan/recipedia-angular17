@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { Meal } from '../types/meal';
+import { Recipe } from '../types/recipe';
 
 @Injectable({
   providedIn: 'root',
@@ -15,12 +15,12 @@ export class RecipeService {
       .pipe(
         map((response: any) => {
           if (!response.meals) return [];
-          return this.formatRecipes(response.meals as Meal[]);
+          return this.formatRecipes(response.meals as Recipe[]);
         }),
       );
   }
 
-  private formatRecipes(meals: Meal[]): Meal[] {
+  private formatRecipes(meals: Recipe[]): Recipe[] {
     return meals.map((meal: any) => {
       const ingredients = [];
       const measures = [];

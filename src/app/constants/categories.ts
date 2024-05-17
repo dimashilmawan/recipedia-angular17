@@ -66,8 +66,27 @@ export const CATEGORIES = [
   },
 ];
 
+export const CATEGORIES_OVERVIEW: CATEGORIES_TYPE[] = [
+  {
+    id: 1,
+    name: 'Beef',
+    thumbnail: 'https://www.themealdb.com/images/category/beef.png',
+  },
+  {
+    id: 2,
+    name: 'Chicken',
+    thumbnail: 'https://www.themealdb.com/images/category/chicken.png',
+  },
+  {
+    id: 8,
+    name: 'Seafood',
+    thumbnail: 'https://www.themealdb.com/images/category/seafood.png',
+  },
+  { id: 0, name: 'More', thumbnail: '' },
+];
+
 export type CATEGORIES_TYPE = {
   id: number;
   name: string;
   thumbnail: string;
-}[];
+};

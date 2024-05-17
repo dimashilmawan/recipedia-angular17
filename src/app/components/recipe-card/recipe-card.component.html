@@ -1,0 +1,23 @@
+<li class="group rounded-xl shadow-md ring-1 ring-gray-950/10">
+  <a
+    routerLink="/recipes/{{ recipe.id }}"
+    class="block overflow-hidden rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+  >
+    <div class="aspect-square">
+      <img
+        src="{{ recipe.thumbnail }}"
+        alt="recipe thumbnail "
+        class="h-full w-full object-cover transition-all group-hover:scale-105"
+      />
+    </div>
+    <div class="relative bg-white p-2 pt-4 text-center">
+      <span
+        class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-sm bg-orange-600 px-2 py-0.5 text-xs font-semibold uppercase text-white"
+        >{{ recipe.category }}</span
+      >
+      <p class="truncate text-sm font-semibold text-gray-800">
+        {{ recipe.name }}
+      </p>
+    </div>
+  </a>
+</li>

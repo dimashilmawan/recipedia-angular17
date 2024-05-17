@@ -1,0 +1,17 @@
+<li
+  class="aspect-video w-32 rounded-md bg-white ring-1 ring-gray-950/10 sm:w-36 md:w-40"
+>
+  <a
+    routerLink="/categories/{{ cat.name === 'More' ? '' : cat.name }}"
+    class="flex h-full w-full flex-col items-center justify-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-600 focus-visible:ring-offset-1"
+  >
+    @if (cat.thumbnail) {
+      <img src="{{ cat.thumbnail }}" alt="category image" class="h-auto w-16" />
+    } @else {
+      <fa-icon [icon]="faEllipsisH" class="text-xl font-semibold"></fa-icon>
+    }
+    <p class="text-xs font-semibold text-gray-700 sm:text-sm">
+      {{ cat.name }}
+    </p>
+  </a>
+</li>
