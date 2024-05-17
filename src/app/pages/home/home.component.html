@@ -1,6 +1,6 @@
 <app-hero></app-hero>
-<section class="relative bg-gray-100 py-24">
-  <app-container customClass="!max-w-2xl ">
+<section class="relative bg-gray-100 py-28 md:py-32">
+  <app-container customClass="!max-w-2xl">
     <ul
       class="absolute -top-0 left-1/2 flex w-full -translate-x-1/2 -translate-y-1/2 flex-wrap justify-center gap-3 sm:gap-6"
     >
@@ -58,18 +58,27 @@
         ></fa-icon>
       </button>
     </form>
-    <ul class="mt-6 grid grid-cols-2 gap-3">
+  </app-container>
+  <app-container customClass="mt-6 md:mt-10">
+    <ul class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
       @for (recipe of recipeResults; track +recipe.id) {
-        <li class="relative overflow-hidden rounded-xl ring-1 ring-gray-950/10">
-          <a routerLink="/recipes/{{ recipe.id }}">
+        <li class="group rounded-xl shadow-md ring-1 ring-gray-950/10">
+          <a
+            routerLink="/recipes/{{ recipe.id }}"
+            class="block overflow-hidden rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+          >
             <div class="aspect-square">
               <img
                 src="{{ recipe.thumbnail }}"
                 alt="recipe thumbnail "
-                class="h-full w-full object-cover"
+                class="h-full w-full object-cover transition-all group-hover:scale-105"
               />
             </div>
-            <div class="bg-white p-2 text-center">
+            <div class="relative bg-white p-2 pt-4 text-center">
+              <span
+                class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-sm bg-orange-600 px-2 py-0.5 text-xs font-semibold uppercase text-white"
+                >{{ recipe.category }}</span
+              >
               <p class="truncate text-sm font-semibold text-gray-800">
                 {{ recipe.name }}
               </p>
@@ -79,10 +88,17 @@
       }
     </ul>
     @if (loading) {
-      <p class="text-center text-5xl font-bold">LOADING</p>
+      <div class="text-center">
+        <fa-icon
+          [icon]="faSpinner"
+          class="inline-block animate-spin text-3xl font-bold"
+        ></fa-icon>
+      </div>
     }
     @if (recipeResults?.length === 0) {
-      <p>No recipe found</p>
+      <p class="text-center text-4xl font-semibold">
+        Sorry, we couldn't find any recipes matching your search criteria.
+      </p>
     }
   </app-container>
 </section>

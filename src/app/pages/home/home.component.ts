@@ -7,10 +7,10 @@ import {
   faEllipsisH,
   faMagnifyingGlass,
   faCircleChevronDown,
+  faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import { RecipeService } from '../../services/recipe.service';
 import { HeroComponent } from '../../components/hero/hero.component';
-import { HttpClient } from '@angular/common/http';
 import { Meal } from '../../types/meal';
 @Component({
   selector: 'app-home',
@@ -23,6 +23,7 @@ export class HomeComponent {
   faEllipsisH = faEllipsisH;
   faMagnifyingGlass = faMagnifyingGlass;
   faCircleChevronDown = faCircleChevronDown;
+  faSpinner = faSpinner;
 
   recipeResults: Meal[] | null = null;
   // recipeResults: Meal[] | null = [
@@ -52,11 +53,11 @@ export class HomeComponent {
   onSubmit(event: SubmitEvent, query: string) {
     event.preventDefault();
     this.loading = true;
+    this.recipeResults = null;
 
     this.recipeService.searchRecipes(query).subscribe({
       next: (value) => {
         this.recipeResults = value;
-        console.log(value[0].thumbnail);
       },
       error: (err) => {},
       complete: () => {
