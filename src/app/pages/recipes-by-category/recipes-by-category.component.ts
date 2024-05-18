@@ -6,7 +6,7 @@ import { ContainerComponent } from '../../components/container/container.compone
 import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 import { RecipeCardComponent } from '../../components/recipe-card/recipe-card.component';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-category-detail',
@@ -28,6 +28,8 @@ export class RecipesByCategoryComponent implements OnInit, OnDestroy {
 
   currentPage: number = 1;
   itemsPerPage: number = 10;
+
+  category: string = this.route.snapshot.paramMap.get('name') as string;
 
   get totalPages() {
     return Math.ceil(
@@ -52,24 +54,32 @@ export class RecipesByCategoryComponent implements OnInit, OnDestroy {
   previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
+      this.router.navigate(['categories/', this.category], {
+        queryParams: { page: this.currentPage },
+      });
     }
   }
 
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
+      this.router.navigate(['categories/', this.category], {
+        queryParams: { page: this.currentPage },
+      });
     }
   }
 
   ngOnInit(): void {
-    const category = this.route.snapshot.paramMap.get('name') as string;
+    this.route.queryParamMap.subscribe((value) => {
+      this.currentPage = +(value.get('page') as string);
+    });
 
     this.loading = true;
     this.error = null;
     this.recipesByCategoryResults = null;
 
     this.httpSubscription = this.recipeService
-      .searchRecipesByCategory(category)
+      .searchRecipesByCategory(this.category)
       .subscribe({
         next: (value) => {
           if (value.length === 0) this.router.navigateByUrl('/categories');

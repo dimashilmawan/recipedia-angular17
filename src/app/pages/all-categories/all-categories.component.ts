@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { CATEGORIES } from '../../constants/categories';
 import { CategoryCardComponent } from '../../components/category-card/category-card.component';
 import { ContainerComponent } from '../../components/container/container.component';
@@ -13,5 +13,6 @@ import { TestService } from '../../services/test.service';
 export class AllCategoriesComponent {
   categories = CATEGORIES;
 
-  // testService = inject(TestService);
+  // constructor(public testService: TestService) {}
+  constructor() {}
 }

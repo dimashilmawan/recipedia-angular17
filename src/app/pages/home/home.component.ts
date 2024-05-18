@@ -32,6 +32,7 @@ import {
   map,
   switchMap,
 } from 'rxjs';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -50,8 +51,6 @@ import {
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements AfterViewInit, OnDestroy {
-  // testService = inject(TestService);
-
   @ViewChild('input') private inputElement!: ElementRef<HTMLInputElement>;
   private inputSubscription!: Subscription;
 
