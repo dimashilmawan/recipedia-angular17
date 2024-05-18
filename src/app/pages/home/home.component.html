@@ -17,11 +17,11 @@
           id="input"
           placeholder="Enter your recipe"
           class="input w-full outline-none"
-          #input
+          [formControl]="input"
         />
         <button
           type="button"
-          (click)="input.value = ''; clearInput()"
+          (click)="input.setValue('')"
           class="button flex h-6 w-6 items-center justify-center rounded-full bg-white outline-none ring-[1.5px] ring-gray-950/10 focus-visible:ring-red-500 focus-visible:ring-offset-1"
         >
           <fa-icon [icon]="faXmark" class="text-xs font-semibold"></fa-icon>
@@ -53,7 +53,7 @@
     <!-- <h1>{{ testService.firstName }}</h1>
     <button (click)="testService.changeName()">change</button> -->
 
-    @if (recipeResults) {
+    @if (recipeResults && recipeResults.length > 0) {
       <app-pagination
         [nextPage]="nextPage.bind(this)"
         [previousPage]="previousPage.bind(this)"
