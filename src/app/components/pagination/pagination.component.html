@@ -1,0 +1,16 @@
+<div class="mx-auto mt-10 flex items-center justify-center gap-6">
+  <button
+    (click)="previousPage()"
+    [disabled]="!(currentPage > 1)"
+    class="block rounded-md bg-white/90 px-3 py-2 text-sm font-semibold shadow-md transition-all hover:-translate-y-0.5 disabled:bg-gray-200/75 disabled:text-gray-500 disabled:shadow-none disabled:hover:translate-y-0"
+  >
+    Prev
+  </button>
+  <button
+    (click)="nextPage()"
+    [disabled]="!(currentPage < totalPages)"
+    class="block rounded-md bg-white/90 px-3 py-2 text-sm font-semibold shadow-md transition-all hover:-translate-y-0.5 disabled:bg-gray-200/75 disabled:text-gray-500 disabled:shadow-none disabled:hover:translate-y-0"
+  >
+    Next
+  </button>
+</div>

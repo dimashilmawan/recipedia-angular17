@@ -10,8 +10,6 @@ export class RecipeService {
   http = inject(HttpClient);
 
   searchRecipes(query: string) {
-    if (!query) return of(null);
-
     return this.http
       .get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`)
       .pipe(

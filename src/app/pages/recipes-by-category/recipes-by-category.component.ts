@@ -7,6 +7,7 @@ import { LoadingSpinnerComponent } from '../../components/loading-spinner/loadin
 import { RecipeCardComponent } from '../../components/recipe-card/recipe-card.component';
 import { CommonModule } from '@angular/common';
 import { Subscription, switchMap } from 'rxjs';
+import { PaginationComponent } from '../../components/pagination/pagination.component';
 
 @Component({
   selector: 'app-category-detail',
@@ -16,6 +17,7 @@ import { Subscription, switchMap } from 'rxjs';
     LoadingSpinnerComponent,
     RecipeCardComponent,
     CommonModule,
+    PaginationComponent,
   ],
   templateUrl: './recipes-by-category.component.html',
 })
@@ -54,7 +56,7 @@ export class RecipesByCategoryComponent implements OnInit, OnDestroy {
   previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.router.navigate(['categories/', this.category], {
+      this.router.navigate(['categories', this.category], {
         queryParams: { page: this.currentPage },
       });
     }
@@ -63,7 +65,7 @@ export class RecipesByCategoryComponent implements OnInit, OnDestroy {
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.router.navigate(['categories/', this.category], {
+      this.router.navigate(['categories', this.category], {
         queryParams: { page: this.currentPage },
       });
     }
@@ -71,7 +73,9 @@ export class RecipesByCategoryComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((value) => {
-      this.currentPage = +(value.get('page') as string);
+      this.currentPage = value.get('page')
+        ? Number(value.get('page') as string)
+        : 1;
     });
 
     this.loading = true;

@@ -23,20 +23,12 @@
     }
 
     @if (recipesByCategoryResults) {
-      <div class="mx-auto mt-10 flex items-center justify-center gap-8">
-        <!-- <button (click)="previousPage()" [disabled]="!(currentPage > 1)">
-          Prev
-        </button>
-        <button (click)="nextPage()" [disabled]="!(currentPage < totalPages)">
-          Next
-        </button> -->
-        @if (currentPage > 1) {
-          <button (click)="previousPage()">Prev</button>
-        }
-        @if (currentPage < totalPages) {
-          <button (click)="nextPage()">Next</button>
-        }
-      </div>
+      <app-pagination
+        [currentPage]="currentPage"
+        [totalPages]="totalPages"
+        [nextPage]="nextPage.bind(this)"
+        [previousPage]="previousPage.bind(this)"
+      ></app-pagination>
     }
   </app-container>
 </section>

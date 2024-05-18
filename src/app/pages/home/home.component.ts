@@ -3,12 +3,13 @@ import {
   Component,
   ElementRef,
   OnDestroy,
+  OnInit,
   ViewChild,
   inject,
 } from '@angular/core';
 import { ContainerComponent } from '../../components/container/container.component';
 import { CATEGORIES_OVERVIEW } from '../../constants/categories';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faMagnifyingGlass,
@@ -30,9 +31,13 @@ import {
   distinctUntilChanged,
   fromEvent,
   map,
+  of,
   switchMap,
 } from 'rxjs';
 import { FormsModule, NgForm } from '@angular/forms';
+import { query } from '@angular/animations';
+import { HttpClient } from '@angular/common/http';
+import { PaginationComponent } from '../../components/pagination/pagination.component';
 
 @Component({
   selector: 'app-home',
@@ -46,25 +51,102 @@ import { FormsModule, NgForm } from '@angular/forms';
     CategoryCardComponent,
     LoadingSpinnerComponent,
     CommonModule,
+    PaginationComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent implements AfterViewInit, OnDestroy {
+// export class HomeComponent implements AfterViewInit, OnDestroy,OnInit {
+export class HomeComponent implements OnInit {
   @ViewChild('input') private inputElement!: ElementRef<HTMLInputElement>;
   private inputSubscription!: Subscription;
+
+  categoriesOverview = CATEGORIES_OVERVIEW;
 
   faXmark = faXmark;
   faCircleChevronDown = faCircleChevronDown;
   faSpinner = faSpinner;
 
-  categoriesOverview = CATEGORIES_OVERVIEW;
-
   recipeResults: RecipeOverview[] | null = null;
   loading = false;
   error: any = null;
 
-  constructor(private recipeService: RecipeService) {}
+  currentPage: number = this.route.snapshot.queryParamMap.get('page')
+    ? Number(this.route.snapshot.queryParamMap.get('page'))
+    : 1;
+  itemsPerPage: number = 10;
+
+  query: string = this.route.snapshot.queryParamMap.get('query')
+    ? (this.route.snapshot.queryParamMap.get('query') as string)
+    : '';
+
+  get totalPages() {
+    return Math.ceil(
+      this.recipeResults ? this.recipeResults.length / this.itemsPerPage : 0,
+    );
+  }
+
+  get paginatedData(): any[] | undefined {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.recipeResults?.slice(startIndex, endIndex);
+  }
+
+  constructor(
+    private recipeService: RecipeService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.router.navigate([''], {
+        queryParams: { query: this.query, page: this.currentPage },
+      });
+    }
+  }
+
+  nextPage() {
+    console.log(this);
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.router.navigate([''], {
+        queryParams: { query: this.query, page: this.currentPage },
+      });
+    }
+  }
+
+  clearInput() {
+    this.router.navigate([''], {
+      queryParams: { query: null, page: null },
+    });
+    this.recipeResults = null;
+  }
+
+  ngOnInit(): void {
+    if (!this.query) return;
+
+    this.loading = true;
+    this.error = null;
+    this.recipeResults = null;
+
+    this.recipeService.searchRecipes(this.query).subscribe({
+      next: (value) => {
+        this.inputElement.nativeElement.value = this.query;
+        this.loading = false;
+        this.recipeResults = value;
+      },
+      error: (err) => {
+        console.log('err');
+        this.loading = false;
+        this.error = err.message;
+      },
+      complete: () => {
+        console.log('complete');
+      },
+    });
+  }
 
   ngAfterViewInit(): void {
     this.inputSubscription = fromEvent(this.inputElement.nativeElement, 'input')
@@ -73,10 +155,23 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
         debounceTime(600),
         distinctUntilChanged(),
         switchMap((value) => {
-          console.log(value);
+          if (!value) {
+            this.router.navigateByUrl('');
+            return of(null);
+          }
+          this.router.navigate([''], {
+            queryParams: {
+              query: value,
+              page: 1,
+            },
+          });
+          this.currentPage = 1;
+          this.query = value;
+
           this.loading = true;
           this.error = null;
           this.recipeResults = null;
+
           return this.recipeService.searchRecipes(value);
         }),
       )
@@ -99,6 +194,8 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.inputSubscription) return this.inputSubscription.unsubscribe();
   }
+
+  // ///////////////////////////////////////////////////
 
   // onSubmit(event: SubmitEvent, query: string) {
   //   event.preventDefault();
