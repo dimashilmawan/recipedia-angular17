@@ -51,12 +51,14 @@ export class RecipeDetailComponent implements OnInit {
 
       this.recipeService.searchRecipeById(categoryId).subscribe({
         next: (value) => {
+          console.log('fetch');
           this.recipe.data = value;
 
           if (!value) {
             this.router.navigateByUrl('/');
           } else {
             this.relatedRecipes.loading = true;
+            this.relatedRecipes.data = null;
             this.fetchRelatedRecipe(value.category, categoryId);
           }
         },

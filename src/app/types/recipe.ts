@@ -6,8 +6,11 @@ export type Recipe = {
   instructions: string[];
   thumbnail: string;
   youtube: string;
-  ingredients: string[];
-  measures: string[];
+  ingredients: {
+    firstHalf: string[];
+    secondHalf: string[];
+  };
+  // measures: string[];
 };
 
 export type RecipeOverview = {

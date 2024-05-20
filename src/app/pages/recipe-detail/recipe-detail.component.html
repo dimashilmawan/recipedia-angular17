@@ -1,5 +1,5 @@
-<section class="pb-8 md:pb-12 lg:pb-16">
-  <app-container>
+<section class="pb-8 pt-4 md:pb-12 md:pt-6 lg:pb-16">
+  <app-container customClass="">
     @if (recipe.data) {
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:gap-8">
         <div class="aspect-square overflow-hidden rounded-lg">
@@ -8,17 +8,70 @@
             class="h-auto w-full object-cover"
           />
         </div>
-        <div class="self-center py-4">
-          <h2
-            class="text-balance text-2xl font-semibold text-gray-800 md:text-3xl"
-          >
+        <div>
+          <h1 class="text-3xl font-semibold text-gray-800 md:text-4xl">
             {{ recipe.data.name }}
-          </h2>
+          </h1>
+          <div
+            class="mt-2 flex items-center gap-3 text-xs font-bold uppercase md:mt-4 md:text-sm"
+          >
+            <a
+              class="rounded-sm bg-orange-500 px-3 py-1 text-white"
+              href="/categories/{{ recipe.data.category }}"
+            >
+              {{ recipe.data.category }}
+            </a>
+            <p class="rounded-sm bg-gray-200 px-3 py-1">
+              {{ recipe.data.origin }}
+            </p>
+          </div>
+          <div class="mt-4 md:mt-6 lg:mt-8">
+            <h3 class="text-lg font-semibold text-gray-800 md:text-xl">
+              Ingredients
+            </h3>
+            <div class="mt-2 flex flex-col sm:flex-row sm:gap-8">
+              <ol class="list-inside list-disc">
+                @for (
+                  ingredient of recipe.data.ingredients.firstHalf;
+                  track $index
+                ) {
+                  <li class="ml-4">
+                    {{ ingredient }}
+                  </li>
+                }
+              </ol>
+              <ol class="list-inside list-disc">
+                @for (
+                  ingredient of recipe.data.ingredients.secondHalf;
+                  track $index
+                ) {
+                  <li class="ml-4">
+                    {{ ingredient }}
+                  </li>
+                }
+              </ol>
+            </div>
+          </div>
+          @if (recipe.data.youtube) {
+            <div class="mt-4 md:mt-6 lg:mt-8">
+              <h3 class="text-lg font-semibold text-gray-800 md:text-xl">
+                Youtube
+              </h3>
+              <a
+                href="{{ recipe.data.youtube }}"
+                class="text-blue-600"
+                target="_blank"
+                >{{ recipe.data.youtube }}</a
+              >
+            </div>
+          }
         </div>
       </div>
       <div class="mt-4 md:mt-6 lg:mt-8">
-        <h3 class="font-semibold uppercase text-gray-800">Instructions</h3>
-        <p class="mt-1 text-justify">
+        <h3 class="text-lg font-semibold text-gray-800 md:text-xl">
+          Instructions
+        </h3>
+        <p class="mt-2 text-justify">
           {{ recipe.data.instructions }}
         </p>
       </div>
@@ -29,6 +82,11 @@
       </div>
     }
 
+    @if (relatedRecipes.loading) {
+      <div class="mt-6 text-center">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+    }
     @if (relatedRecipes.data) {
       <div class="mt-6 md:mt-8 lg:mt-10">
         <h2 class="text-xl font-semibold md:text-2xl">
@@ -41,11 +99,6 @@
             <app-recipe-card [recipe]="recipe"></app-recipe-card>
           }
         </ul>
-      </div>
-    }
-    @if (relatedRecipes.loading) {
-      <div class="text-center">
-        <app-loading-spinner></app-loading-spinner>
       </div>
     }
   </app-container>

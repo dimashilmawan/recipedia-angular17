@@ -97,23 +97,22 @@ export class RecipeService {
   private formatRecipes({ meals }: { meals: Array<any> }): Recipe {
     const meal = meals[0];
     const ingredients = [];
-    const measures = [];
     const instructions = meal.strInstructions;
 
     for (let i = 1; i <= 20; i++) {
       const ingredientKey = `strIngredient${i}`;
       const measureKey = `strMeasure${i}`;
-      const ingredient = meal[ingredientKey];
-      const measure = meal[measureKey];
+      const ingredient = meal[ingredientKey].trim();
+      const measure = meal[measureKey].trim();
 
-      if (ingredient && ingredient.trim()) {
-        ingredients.push(ingredient.trim());
-      }
-
-      if (measure && measure.trim()) {
-        measures.push(measure.trim());
+      if (ingredient && measure) {
+        ingredients.push(`${measure.trim()} ${ingredient.trim()}`);
       }
     }
+
+    const midpoint = Math.ceil(ingredients.length / 2);
+    const firstHalf = ingredients.slice(0, midpoint);
+    const secondHalf = ingredients.slice(midpoint);
 
     return {
       id: meal.idMeal,
@@ -122,9 +121,12 @@ export class RecipeService {
       origin: meal.strArea,
       thumbnail: meal.strMealThumb,
       youtube: meal.strYoutube,
-      ingredients,
+      ingredients: {
+        firstHalf,
+        secondHalf,
+      },
       instructions,
-      measures,
+      // measures,
     };
   }
 }
