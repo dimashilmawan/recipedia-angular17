@@ -23,10 +23,17 @@ import { PaginationComponent } from '../../components/pagination/pagination.comp
 })
 export class RecipesByCategoryComponent implements OnInit, OnDestroy {
   private httpSubscription!: Subscription;
+  private queryParamsSubscription!: Subscription;
 
-  recipesByCategoryResults: RecipeOverview[] | null = null;
-  loading = false;
-  error: any = null;
+  recipesByCategoryResults: {
+    data: RecipeOverview[] | null;
+    loading: boolean;
+    error: any;
+  } = {
+    data: null,
+    loading: true,
+    error: null,
+  };
 
   currentPage: number = 1;
   itemsPerPage: number = 10;
@@ -35,8 +42,8 @@ export class RecipesByCategoryComponent implements OnInit, OnDestroy {
 
   get totalPages() {
     return Math.ceil(
-      this.recipesByCategoryResults
-        ? this.recipesByCategoryResults.length / this.itemsPerPage
+      this.recipesByCategoryResults.data
+        ? this.recipesByCategoryResults.data.length / this.itemsPerPage
         : 0,
     );
   }
@@ -44,7 +51,7 @@ export class RecipesByCategoryComponent implements OnInit, OnDestroy {
   get paginatedData(): any[] | undefined {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    return this.recipesByCategoryResults?.slice(startIndex, endIndex);
+    return this.recipesByCategoryResults.data?.slice(startIndex, endIndex);
   }
 
   constructor(
@@ -72,34 +79,34 @@ export class RecipesByCategoryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe((value) => {
-      this.currentPage = value.get('page')
-        ? Number(value.get('page') as string)
-        : 1;
-    });
-
-    this.loading = true;
-    this.error = null;
-    this.recipesByCategoryResults = null;
+    this.queryParamsSubscription = this.route.queryParamMap.subscribe(
+      (value) => {
+        this.currentPage = value.get('page')
+          ? Number(value.get('page') as string)
+          : 1;
+      },
+    );
 
     this.httpSubscription = this.recipeService
       .searchRecipesByCategory(this.category)
       .subscribe({
         next: (value) => {
           if (value.length === 0) this.router.navigateByUrl('/categories');
-          this.recipesByCategoryResults = value;
+          this.recipesByCategoryResults.data = value;
         },
         error: (err) => {
-          this.error = err.message;
-          this.loading = false;
+          this.recipesByCategoryResults.error = err.message;
         },
         complete: () => {
-          this.loading = false;
+          this.recipesByCategoryResults.loading = false;
         },
       });
   }
 
   ngOnDestroy(): void {
-    if (this.httpSubscription) return this.httpSubscription.unsubscribe();
+    if (this.httpSubscription) {
+      this.httpSubscription.unsubscribe();
+      this.queryParamsSubscription.unsubscribe();
+    }
   }
 }

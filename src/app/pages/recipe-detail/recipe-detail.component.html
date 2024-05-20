@@ -1,0 +1,52 @@
+<section class="pb-8 md:pb-12 lg:pb-16">
+  <app-container>
+    @if (recipe.data) {
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:gap-8">
+        <div class="aspect-square overflow-hidden rounded-lg">
+          <img
+            src="{{ recipe.data.thumbnail }}"
+            class="h-auto w-full object-cover"
+          />
+        </div>
+        <div class="self-center py-4">
+          <h2
+            class="text-balance text-2xl font-semibold text-gray-800 md:text-3xl"
+          >
+            {{ recipe.data.name }}
+          </h2>
+        </div>
+      </div>
+      <div class="mt-4 md:mt-6 lg:mt-8">
+        <h3 class="font-semibold uppercase text-gray-800">Instructions</h3>
+        <p class="mt-1 text-justify">
+          {{ recipe.data.instructions }}
+        </p>
+      </div>
+    }
+    @if (recipe.loading) {
+      <div class="mt-4 text-center md:mt-6 lg:mt-10">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+    }
+
+    @if (relatedRecipes.data) {
+      <div class="mt-6 md:mt-8 lg:mt-10">
+        <h2 class="text-xl font-semibold md:text-2xl">
+          {{ recipe.data?.category }} Recommendations
+        </h2>
+        <ul
+          class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-7 xl:grid-cols-5"
+        >
+          @for (recipe of relatedRecipes.data; track +recipe.id) {
+            <app-recipe-card [recipe]="recipe"></app-recipe-card>
+          }
+        </ul>
+      </div>
+    }
+    @if (relatedRecipes.loading) {
+      <div class="text-center">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+    }
+  </app-container>
+</section>

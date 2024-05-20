@@ -1,29 +1,33 @@
-<section class="py-4 md:py-6 lg:py-32">
-  <app-container customClass="mt-6 md:mt-10">
-    <!-- ADD HEADING CATEGORY by searchParams -->
+<section class="min-h-screen pb-8 pt-4 md:pb-12 md:pt-6 lg:pb-16">
+  <app-container>
+    <h1 class="text-xl font-semibold md:text-3xl lg:text-4xl">
+      {{ category }}
+    </h1>
     <ul
-      class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-7 xl:grid-cols-5"
+      class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 md:mt-6 lg:mt-8 lg:grid-cols-4 lg:gap-7 xl:grid-cols-5"
     >
       @for (recipe of paginatedData; track +recipe.id) {
         <app-recipe-card [recipe]="recipe"></app-recipe-card>
       }
     </ul>
 
-    @if (loading) {
-      <app-loading-spinner></app-loading-spinner>
+    @if (recipesByCategoryResults.loading) {
+      <div class="mt-4 text-center md:mt-6 lg:mt-10">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
     }
-    @if (error) {
+    @if (recipesByCategoryResults.error) {
       <p class="text-center text-sm text-red-700 md:text-xl">
-        {{ error | json }}
+        {{ recipesByCategoryResults.error | json }}
       </p>
     }
-    @if (recipesByCategoryResults?.length === 0) {
+    @if (recipesByCategoryResults.data?.length === 0) {
       <p class="text-center text-sm font-semibold md:text-xl">
         Sorry, we couldn't find any recipes matching your Category.
       </p>
     }
 
-    @if (recipesByCategoryResults) {
+    @if (recipesByCategoryResults.data) {
       <app-pagination
         [currentPage]="currentPage"
         [totalPages]="totalPages"

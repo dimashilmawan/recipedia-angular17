@@ -8,28 +8,37 @@
         <app-category-card [cat]="cat"></app-category-card>
       }
     </ul>
-    <form id="search" (submit)="$event.preventDefault()">
-      <label
-        class="flex items-center gap-3 rounded-md bg-white px-4 py-2 pr-2 [&:has(.input:focus-visible)]:ring-2 [&:has(.input:focus-visible)]:ring-orange-600"
-        for="input"
-      >
-        <input
-          id="input"
-          placeholder="Enter your recipe"
-          class="input w-full outline-none"
-          [formControl]="input"
-        />
-        <button
-          type="button"
-          (click)="input.setValue('')"
-          class="button flex h-6 w-6 items-center justify-center rounded-full bg-white outline-none ring-[1.5px] ring-gray-950/10 focus-visible:ring-red-500 focus-visible:ring-offset-1"
+    <div class="relative bg-purple-500">
+      <form id="search" (submit)="$event.preventDefault()" class="w-full">
+        <label
+          class="flex items-center gap-3 rounded-md bg-white px-4 py-2 pr-2 [&:has(.input:focus-visible)]:ring-2 [&:has(.input:focus-visible)]:ring-orange-600"
+          for="input"
         >
-          <fa-icon [icon]="faXmark" class="text-xs font-semibold"></fa-icon>
-        </button>
-      </label>
-    </form>
+          <input
+            id="input"
+            placeholder="Enter your recipe"
+            class="input w-full outline-none"
+            [formControl]="input"
+          />
+          <button
+            type="button"
+            (click)="input.setValue('')"
+            class="button flex h-6 w-6 items-center justify-center rounded-full bg-white outline-none ring-[1.5px] ring-gray-950/10 focus-visible:ring-red-500 focus-visible:ring-offset-1"
+          >
+            <fa-icon [icon]="faXmark" class="text-xs font-semibold"></fa-icon>
+          </button>
+        </label>
+      </form>
+      @if (recipeResults.loading) {
+        <div
+          class="absolute left-1/2 top-full -translate-x-1/2 translate-y-2 text-center"
+        >
+          <app-loading-spinner></app-loading-spinner>
+        </div>
+      }
+    </div>
   </app-container>
-  <app-container customClass="mt-6 md:mt-10">
+  <app-container customClass="mt-14 ">
     <ul
       class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-7 xl:grid-cols-5"
     >
@@ -37,23 +46,19 @@
         <app-recipe-card [recipe]="recipe"></app-recipe-card>
       }
     </ul>
-    @if (loading) {
-      <app-loading-spinner></app-loading-spinner>
-    }
-    @if (error) {
+
+    @if (recipeResults.error) {
       <p class="text-center text-sm text-red-700 md:text-xl">
-        {{ error | json }}
+        {{ recipeResults.error | json }}
       </p>
     }
-    @if (recipeResults?.length === 0) {
+    @if (recipeResults.data?.length === 0) {
       <p class="text-center text-sm font-semibold md:text-xl">
         Sorry, we couldn't find any recipes matching your search criteria.
       </p>
     }
-    <!-- <h1>{{ testService.firstName }}</h1>
-    <button (click)="testService.changeName()">change</button> -->
 
-    @if (recipeResults && recipeResults.length > 0) {
+    @if (recipeResults.data && recipeResults.data.length > 0) {
       <app-pagination
         [nextPage]="nextPage.bind(this)"
         [previousPage]="previousPage.bind(this)"

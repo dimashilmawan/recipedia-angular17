@@ -11,6 +11,7 @@ export const routes: Routes = [
     //   import('./pages/home/home.component').then((m) => m.HomeComponent),
     component: HomeComponent,
   },
+
   {
     path: 'categories',
     loadComponent: () =>
@@ -25,6 +26,15 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/recipes-by-category/recipes-by-category.component').then(
         (m) => m.RecipesByCategoryComponent,
+      ),
+
+    // component: CategoriesComponent,
+  },
+  {
+    path: 'recipes/:id',
+    loadComponent: () =>
+      import('./pages/recipe-detail/recipe-detail.component').then(
+        (m) => m.RecipeDetailComponent,
       ),
 
     // component: CategoriesComponent,

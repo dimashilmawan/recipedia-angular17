@@ -15,8 +15,38 @@ export class RecipeService {
       .pipe(
         map((response: any) => {
           if (!response.meals) return [];
-          return this.formatRecipes({
+          return this.formatRecipeOverviews({
             meals: response.meals,
+          });
+        }),
+      );
+  }
+
+  searchRecipeById(id: string) {
+    return this.http
+      .get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
+      .pipe(
+        map((response: any) => {
+          if (!response.meals) return null;
+          return this.formatRecipes({ meals: response.meals });
+        }),
+      );
+  }
+
+  searchRelatedRecipes(category: string, categoryId: string) {
+    return this.http
+      .get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`)
+      .pipe(
+        map((response: any) => {
+          if (!response.meals) return [];
+          const meals = response.meals
+            .sort(() => Math.random() - 0.3)
+            .filter((meal: any) => meal.idMeal !== categoryId)
+            .slice(0, 5);
+
+          return this.formatRecipeOverviews({
+            meals: meals,
+            category: category,
           });
         }),
       );
@@ -28,7 +58,7 @@ export class RecipeService {
       .pipe(
         map((response: any) => {
           if (!response.meals) return [];
-          return this.formatRecipes({
+          return this.formatRecipeOverviews({
             meals: response.meals,
             category: category,
           });
@@ -36,7 +66,7 @@ export class RecipeService {
       );
   }
 
-  private formatRecipes({
+  private formatRecipeOverviews({
     meals,
     category,
   }: {
@@ -63,57 +93,38 @@ export class RecipeService {
       }
     });
   }
+
+  private formatRecipes({ meals }: { meals: Array<any> }): Recipe {
+    const meal = meals[0];
+    const ingredients = [];
+    const measures = [];
+    const instructions = meal.strInstructions;
+
+    for (let i = 1; i <= 20; i++) {
+      const ingredientKey = `strIngredient${i}`;
+      const measureKey = `strMeasure${i}`;
+      const ingredient = meal[ingredientKey];
+      const measure = meal[measureKey];
+
+      if (ingredient && ingredient.trim()) {
+        ingredients.push(ingredient.trim());
+      }
+
+      if (measure && measure.trim()) {
+        measures.push(measure.trim());
+      }
+    }
+
+    return {
+      id: meal.idMeal,
+      name: meal.strMeal,
+      category: meal.strCategory,
+      origin: meal.strArea,
+      thumbnail: meal.strMealThumb,
+      youtube: meal.strYoutube,
+      ingredients,
+      instructions,
+      measures,
+    };
+  }
 }
-
-//   private formatRecipes({
-//     meals,
-//     full,
-//     category,
-//   }: {
-//     meals: Array<any>;
-//     full: boolean;
-//     category?: string;
-//   }): Recipe[] | RecipeOverview[] {
-//     return meals.map((meal: any) => {
-//       if (full) {
-//         const ingredients = [];
-//         const measures = [];
-
-//         for (let i = 1; i <= 20; i++) {
-//           const ingredientKey = `strIngredient${i}`;
-//           const measureKey = `strMeasure${i}`;
-//           const ingredient = meal[ingredientKey];
-//           const measure = meal[measureKey];
-
-//           if (ingredient && ingredient.trim()) {
-//             ingredients.push(ingredient.trim());
-//           }
-
-//           if (measure && measure.trim()) {
-//             measures.push(measure.trim());
-//           }
-//         }
-//         return {
-//           id: meal.idMeal,
-//           name: meal.strMeal,
-//           category: meal.strCategory,
-//           origin: meal.strArea,
-//           instructions: meal.strInstructions,
-//           thumbnail: meal.strMealThumb,
-//           youtube: meal.strYoutube,
-//           ingredients,
-//           measures,
-//         };
-//       } else {
-//         return {
-//           id: meal.idMeal,
-//           name: meal.strMeal,
-//           category:
-//             (category as string).charAt(0).toUpperCase() +
-//             (category as string).slice(1),
-//           thumbnail: meal.strMealThumb,
-//         };
-//       }
-//     });
-//   }
-// }

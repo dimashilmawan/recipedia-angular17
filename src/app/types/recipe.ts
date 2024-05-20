@@ -3,7 +3,7 @@ export type Recipe = {
   name: string;
   category: string;
   origin: string;
-  instructions: string;
+  instructions: string[];
   thumbnail: string;
   youtube: string;
   ingredients: string[];
