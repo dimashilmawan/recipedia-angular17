@@ -87,7 +87,6 @@ export class NavComponent {
   }
   unsaveRecipe() {
     if (this.currentRecipe) {
-      console.log(this.currentRecipe);
       this.hasSaved = false;
       this.recipeService.removeRecipeToLocalStorage(this.currentRecipe?.id);
     }

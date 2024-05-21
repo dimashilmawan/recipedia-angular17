@@ -146,7 +146,6 @@ export class HomeComponent implements OnInit {
     this.queryParamsSubscription = this.route.queryParamMap.subscribe(
       (value) => {
         if (value.get('page') && value.get('query')) {
-          console.log('get back');
           this.currentPage = Number(value.get('page'));
 
           this.query = value.get('query') as string;

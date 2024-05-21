@@ -6,5 +6,6 @@
   html {
     font-family: "Open Sans", system-ui, sans-serif;
     @apply bg-gray-100 text-gray-700;
+    scroll-behavior: smooth;
   }
 }

@@ -7,38 +7,6 @@ import { Recipe, RecipeOverview } from '../types/recipe';
   providedIn: 'root',
 })
 export class RecipeService {
-  // private myRecipes: Recipe[] = [];
-  // private currentRecipe: Recipe | null = null;
-
-  // get hasRecipeSaved() {
-  //   console.log(this.currentRecipe);
-  //   return this.myRecipes.some((recipe) => recipe.id === recipe.id);
-  // }
-
-  // loadMyRecipesFromLocalStorage() {
-  //   if (localStorage.getItem('my-recipes')) {
-  //     this.myRecipes = JSON.parse(localStorage.getItem('my-recipe') as string);
-  //   } else {
-  //     this.myRecipes = [];
-  //   }
-  // }
-
-  // setCurrentRecipe(recipe: Recipe | null) {
-  //   this.currentRecipe = recipe;
-  // }
-
-  // saveRecipeToLocalStorage() {
-  //   this.myRecipes.push(this.currentRecipe as Recipe);
-  //   localStorage.setItem('my-recipes', JSON.stringify(this.myRecipes));
-  // }
-
-  // removeRecipeFromLocalStorage() {
-  //   this.myRecipes = this.myRecipes.filter(
-  //     (recipe) => recipe.id !== this.currentRecipe?.id,
-  //   );
-  //   localStorage.setItem('myRecipes', JSON.stringify(this.myRecipes));
-  // }
-
   private savedRecipes: Recipe[] = [];
 
   private currentRecipeSubject = new Subject<Recipe | null>();
