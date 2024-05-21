@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ContainerComponent } from '../../components/container/container.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RecipeService } from '../../services/recipe.service';
 import { Recipe, RecipeOverview } from '../../types/recipe';
 import { RecipeCardComponent } from '../../components/recipe-card/recipe-card.component';
 import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-category-detail',
@@ -15,6 +15,8 @@ import { CommonModule } from '@angular/common';
     RecipeCardComponent,
     LoadingSpinnerComponent,
     CommonModule,
+    RouterLink,
+    NgOptimizedImage,
   ],
   templateUrl: './recipe-detail.component.html',
 })
@@ -51,8 +53,8 @@ export class RecipeDetailComponent implements OnInit {
 
       this.recipeService.searchRecipeById(categoryId).subscribe({
         next: (value) => {
-          console.log('fetch');
           this.recipe.data = value;
+          this.recipeService.setCurrentRecipe(value);
 
           if (!value) {
             this.router.navigateByUrl('/');

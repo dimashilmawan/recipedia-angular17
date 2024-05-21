@@ -21,7 +21,7 @@ export class MobileNavComponent {
   links = [
     { title: 'Home', url: '/' },
     { title: 'Category', url: '/category' },
-    { title: 'My Recipe', url: '/my-recipe' },
+    { title: 'My Recipes', url: '/my-recipes' },
   ];
 
   mobileService = inject(MobileService);

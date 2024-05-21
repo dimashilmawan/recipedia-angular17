@@ -20,6 +20,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ModalComponent } from '../modal/modal.component';
 import { ModalService } from '../../services/modal.service';
 import { MobileService } from '../../services/mobile.service';
+import { RecipeService } from '../../services/recipe.service';
+import { Recipe } from '../../types/recipe';
 
 @Component({
   selector: 'app-nav',
@@ -50,10 +52,24 @@ export class NavComponent {
     { title: 'My Recipes', url: '/my-recipes' },
   ];
 
+  hasSaved!: boolean;
   isRecipeDetail!: boolean;
 
-  constructor(private router: Router) {}
+  currentRecipe!: Recipe | null;
+
+  constructor(
+    private router: Router,
+    private recipeService: RecipeService,
+  ) {}
+
   ngOnInit() {
+    // this.recipeService.loadRecipesFromLocalStorage();
+
+    this.recipeService.currentRecipe$.subscribe((value) => {
+      this.currentRecipe = value;
+      this.hasSaved = this.recipeService.hasRecipeSaved(value ? value.id : '');
+    });
+
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe((event) => {
@@ -61,5 +77,19 @@ export class NavComponent {
           '/recipes/',
         );
       });
+  }
+
+  saveRecipe() {
+    if (this.currentRecipe) {
+      this.hasSaved = true;
+      this.recipeService.saveRecipeToLocalStorage(this.currentRecipe);
+    }
+  }
+  unsaveRecipe() {
+    if (this.currentRecipe) {
+      console.log(this.currentRecipe);
+      this.hasSaved = false;
+      this.recipeService.removeRecipeToLocalStorage(this.currentRecipe?.id);
+    }
   }
 }

@@ -22,9 +22,14 @@
           <button (click)="modalService.openModal()">
             <fa-icon [icon]="faInfoCircle"></fa-icon>
           </button>
-          @if (isRecipeDetail) {
-            <button>
+          @if (isRecipeDetail && !hasSaved) {
+            <button (click)="saveRecipe()">
               <fa-icon [icon]="faBookmarkOutline"></fa-icon>
+            </button>
+          }
+          @if (isRecipeDetail && hasSaved) {
+            <button (click)="unsaveRecipe()">
+              <fa-icon [icon]="faBookmarkSolid"></fa-icon>
             </button>
           }
         </div>

@@ -1,12 +1,85 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { map, of } from 'rxjs';
+import { Subject, map, of } from 'rxjs';
 import { Recipe, RecipeOverview } from '../types/recipe';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecipeService {
+  // private myRecipes: Recipe[] = [];
+  // private currentRecipe: Recipe | null = null;
+
+  // get hasRecipeSaved() {
+  //   console.log(this.currentRecipe);
+  //   return this.myRecipes.some((recipe) => recipe.id === recipe.id);
+  // }
+
+  // loadMyRecipesFromLocalStorage() {
+  //   if (localStorage.getItem('my-recipes')) {
+  //     this.myRecipes = JSON.parse(localStorage.getItem('my-recipe') as string);
+  //   } else {
+  //     this.myRecipes = [];
+  //   }
+  // }
+
+  // setCurrentRecipe(recipe: Recipe | null) {
+  //   this.currentRecipe = recipe;
+  // }
+
+  // saveRecipeToLocalStorage() {
+  //   this.myRecipes.push(this.currentRecipe as Recipe);
+  //   localStorage.setItem('my-recipes', JSON.stringify(this.myRecipes));
+  // }
+
+  // removeRecipeFromLocalStorage() {
+  //   this.myRecipes = this.myRecipes.filter(
+  //     (recipe) => recipe.id !== this.currentRecipe?.id,
+  //   );
+  //   localStorage.setItem('myRecipes', JSON.stringify(this.myRecipes));
+  // }
+
+  private savedRecipes: Recipe[] = [];
+
+  private currentRecipeSubject = new Subject<Recipe | null>();
+  currentRecipe$ = this.currentRecipeSubject.asObservable();
+
+  getSavedRecipes() {
+    return this.savedRecipes;
+  }
+
+  loadRecipesFromLocalStorage() {
+    if (localStorage.getItem('saved-recipes')) {
+      this.savedRecipes = JSON.parse(
+        localStorage.getItem('saved-recipes') as string,
+      );
+    } else {
+      this.savedRecipes = [];
+    }
+  }
+
+  saveRecipeToLocalStorage(recipe: Recipe) {
+    this.savedRecipes.push(recipe);
+    localStorage.setItem('saved-recipes', JSON.stringify(this.savedRecipes));
+  }
+
+  removeRecipeToLocalStorage(recipeId: string) {
+    this.savedRecipes = this.savedRecipes.filter(
+      (recipe) => recipe.id !== recipeId,
+    );
+    localStorage.setItem('saved-recipes', JSON.stringify(this.savedRecipes));
+  }
+
+  setCurrentRecipe(recipe: Recipe | null) {
+    this.currentRecipeSubject.next(recipe);
+  }
+
+  hasRecipeSaved(recipeId: string) {
+    return this.savedRecipes.some((recipe) => recipe.id === recipeId);
+  }
+
+  // /////////////////////////////////////////////////////
+
   http = inject(HttpClient);
 
   searchRecipes(query: string) {
@@ -96,24 +169,22 @@ export class RecipeService {
 
   private formatRecipes({ meals }: { meals: Array<any> }): Recipe {
     const meal = meals[0];
-    const ingredients = [];
+    const ingredients: any[] = [];
     const instructions = meal.strInstructions;
 
     for (let i = 1; i <= 20; i++) {
       const ingredientKey = `strIngredient${i}`;
       const measureKey = `strMeasure${i}`;
-      const ingredient = meal[ingredientKey].trim();
-      const measure = meal[measureKey].trim();
+      const ingredient = meal[ingredientKey]?.trim();
+      const measure = meal[measureKey]?.trim();
 
       if (ingredient && measure) {
         ingredients.push(`${measure.trim()} ${ingredient.trim()}`);
       }
     }
-
     const midpoint = Math.ceil(ingredients.length / 2);
     const firstHalf = ingredients.slice(0, midpoint);
     const secondHalf = ingredients.slice(midpoint);
-
     return {
       id: meal.idMeal,
       name: meal.strMeal,

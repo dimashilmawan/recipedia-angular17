@@ -1,6 +1,5 @@
-<section
-  class="relative aspect-square w-full bg-hero bg-cover bg-center bg-no-repeat sm:aspect-video md:aspect-[16/7]"
->
+<section class="relative aspect-square w-full sm:aspect-video md:aspect-[16/7]">
+  <img ngSrc="/assets/hero.jpg" priority fill class="object-cover" />
   <div class="absolute inset-0 h-full bg-black/60">
     <app-container
       customClass="gap-3 h-full flex flex-col items-center justify-center text-center text-white"
@@ -8,7 +7,8 @@
       <h1 class="text-3xl font-bold md:text-5xl">
         Seach Among <span class="bg-orange-500/85">Thousand</span> Recipes.
         <a
-          href="/#search"
+          routerLink="/"
+          fragment="search"
           class="inline-block animate-bounce text-3xl md:text-4xl"
           ><fa-icon [icon]="faCircleChevronDown"></fa-icon>
         </a>

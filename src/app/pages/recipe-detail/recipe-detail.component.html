@@ -2,9 +2,11 @@
   <app-container customClass="">
     @if (recipe.data) {
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:gap-8">
-        <div class="aspect-square overflow-hidden rounded-lg">
+        <div class="relative aspect-square overflow-hidden rounded-lg">
           <img
-            src="{{ recipe.data.thumbnail }}"
+            ngSrc="{{ recipe.data.thumbnail }}"
+            priority
+            fill
             class="h-auto w-full object-cover"
           />
         </div>
@@ -17,7 +19,7 @@
           >
             <a
               class="rounded-sm bg-orange-500 px-3 py-1 text-white"
-              href="/categories/{{ recipe.data.category }}"
+              routerLink="/categories/{{ recipe.data.category }}"
             >
               {{ recipe.data.category }}
             </a>
